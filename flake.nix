@@ -11,6 +11,7 @@
     systems = [ "x86_64-linux" ];
     perSystem = { pkgs, ... }: {
       devShells.default = pkgs.callPackage ./shell.nix { };
+      packages.default = pkgs.callPackage ./download-from-pypi.nix {};
       formatter = pkgs.nixpkgs-fmt;
     };
   };
