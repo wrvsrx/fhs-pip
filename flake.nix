@@ -9,14 +9,17 @@
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {
     systems = [ "x86_64-linux" ];
-    perSystem = { pkgs, ... }: {
+    perSystem = { pkgs, system, ... }: {
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
       devShells.default = pkgs.callPackage ./shell.nix { };
       packages.fhs =
         let
-          downloaded-from-pypi = pkgs.callPackage ./download-from-pypi.nix { };
+          downloaded-packages-from-pypi = pkgs.callPackage ./downloaded-packages-from-pypi.nix { };
         in
-        pkgs.callPackage ./fhs.nix { inherit downloaded-from-pypi; };
-      packages.default = pkgs.callPackage ./download-from-pypi.nix { };
+        pkgs.callPackage ./fhs.nix { inherit downloaded-packages-from-pypi; };
       formatter = pkgs.nixpkgs-fmt;
     };
   };

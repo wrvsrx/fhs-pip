@@ -1,6 +1,8 @@
 { buildFHSUserEnv
+, cudatoolkit
+, cudaPackages
 , zlib
-, downloaded-from-pypi
+, downloaded-packages-from-pypi
 }:
 buildFHSUserEnv {
   name = "fhs";
@@ -11,6 +13,9 @@ buildFHSUserEnv {
   ];
   targetPkgs = pkgs: with pkgs; [
     python3
+    cudatoolkit
+    cudaPackages.cudnn
+    cudaPackages.libcublas
     (runCommandNoCC "wsl" { } "mkdir -p $out/lib/wsl")
     zlib
   ];
@@ -26,7 +31,7 @@ buildFHSUserEnv {
     export PYTHONPATH=$PWD
     python -m venv .venv
     source .venv/bin/activate
-    pip install --no-index --find-links ${downloaded-from-pypi} -r requirements.txt
+    pip install --no-index --find-links ${downloaded-packages-from-pypi} -r requirements.txt
   '';
 }
 
