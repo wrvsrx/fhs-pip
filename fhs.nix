@@ -1,5 +1,6 @@
 { buildFHSUserEnv
 , zlib
+, downloaded-from-pypi
 }:
 buildFHSUserEnv {
   name = "fhs";
@@ -23,6 +24,9 @@ buildFHSUserEnv {
   profile = ''
     export LD_LIBRARY_PATH=/usr/lib/wsl/lib
     export PYTHONPATH=$PWD
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install --no-index --find-links ${downloaded-from-pypi} -r requirements.txt
   '';
 }
 

@@ -11,7 +11,12 @@
     systems = [ "x86_64-linux" ];
     perSystem = { pkgs, ... }: {
       devShells.default = pkgs.callPackage ./shell.nix { };
-      packages.default = pkgs.callPackage ./download-from-pypi.nix {};
+      packages.fhs =
+        let
+          downloaded-from-pypi = pkgs.callPackage ./download-from-pypi.nix { };
+        in
+        pkgs.callPackage ./fhs.nix { inherit downloaded-from-pypi; };
+      packages.default = pkgs.callPackage ./download-from-pypi.nix { };
       formatter = pkgs.nixpkgs-fmt;
     };
   };
